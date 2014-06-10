@@ -1,6 +1,8 @@
 ===================
 Pomodoro Calculator
 ===================
+.. image:: https://travis-ci.org/Matt-Stevens/Pomodoro-Calculator.svg?branch=master
+    :target: https://travis-ci.org/Matt-Stevens/Pomodoro-Calculator
 
 Command line tool to calculate the number of pomodoros available between two points in time.
 
