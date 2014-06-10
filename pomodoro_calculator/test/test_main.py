@@ -72,3 +72,33 @@ class PomodoroTest(unittest.TestCase):
         for t in times:
             self.assertFalse(self.calculator._compare_times(t[0], t[1]))
             self.assertTrue(self.calculator._compare_times(t[1], t[0]))
+
+    @freeze_time('2014-01-01 15:30:00')
+    def test_start_time_initialisation(self):
+        """
+        Does the `start` attribute initialise properly?
+        """
+        self.assertEqual(
+            PomodoroCalculator(end='18:30').start,
+            datetime(2014, 1, 1, 15, 30),
+        )
+
+        self.assertEqual(
+            PomodoroCalculator(end='18:30', start='16:30').start,
+            datetime(2014, 1, 1, 16, 30),
+        )
+
+    @freeze_time('2014-01-01 15:30:00')
+    def test_end_time_initialisation(self):
+        """
+        Does the `end` attribute initialise properly?
+        """
+        self.assertEqual(
+            PomodoroCalculator(end='18:30').end,
+            datetime(2014, 1, 1, 18, 30),
+        )
+
+        self.assertEqual(
+            PomodoroCalculator(end='18:30', start='19:30').end,
+            datetime(2014, 1, 2, 18, 30),
+        )

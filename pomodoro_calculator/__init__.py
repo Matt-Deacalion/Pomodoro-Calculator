@@ -5,6 +5,20 @@ class PomodoroCalculator:
     """
     Calculates the number of pomodoros available in an amount of time.
     """
+    def __init__(self, end, start='now', short_break=5, long_break=15):
+        if start == 'now':
+            start = datetime.datetime.now().strftime('%H:%M:%S')
+
+        # if the end time is earlier than the start, overlap to the next day
+        if self._compare_times(start, end):
+            self.end = self._create_datetime(end, tomorrow=True)
+        else:
+            self.end = self._create_datetime(end)
+
+        self.start = self._create_datetime(start)
+        self.short_break = short_break
+        self.long_break = long_break
+
     def _compare_times(self, a, b):
         """
         Returns True if the time string `a` is later than `b`.
