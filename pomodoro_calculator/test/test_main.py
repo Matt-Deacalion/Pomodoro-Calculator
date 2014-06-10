@@ -127,3 +127,39 @@ class PomodoroTest(unittest.TestCase):
         """
         calculator = PomodoroCalculator(end='18:00', start='18:15')
         self.assertEqual(calculator.long_break_seconds, 15 * 60)
+
+    @freeze_time('2014-01-01 00:00:00')
+    def test_get_item(self):
+        """
+        Does the `_get_item` method work correctly?
+        """
+        pomodoro = PomodoroCalculator(end='03:00')
+        short_break = PomodoroCalculator(end='03:00')
+        long_break = PomodoroCalculator(end='03:00')
+
+        self.assertDictEqual(
+            pomodoro._get_item(3600, 'pomodoro'),
+            {
+                'type': 'pomodoro',
+                'start': datetime(2014, 1, 1, 2),
+                'end': datetime(2014, 1, 1, 2, 25),
+            },
+        )
+
+        self.assertDictEqual(
+            short_break._get_item(3600, 'short-break'),
+            {
+                'type': 'short-break',
+                'start': datetime(2014, 1, 1, 2),
+                'end': datetime(2014, 1, 1, 2, 5),
+            },
+        )
+
+        self.assertDictEqual(
+            long_break._get_item(3600, 'long-break'),
+            {
+                'type': 'long-break',
+                'start': datetime(2014, 1, 1, 2),
+                'end': datetime(2014, 1, 1, 2, 15),
+            },
+        )

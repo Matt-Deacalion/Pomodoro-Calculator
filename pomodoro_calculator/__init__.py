@@ -5,6 +5,8 @@ class PomodoroCalculator:
     """
     Calculates the number of pomodoros available in an amount of time.
     """
+    pomodoro_length = 25 * 60
+
     def __init__(self, end, start='now', short_break=5, long_break=15):
         if start == 'now':
             start = datetime.datetime.now().strftime('%H:%M:%S')
@@ -63,3 +65,20 @@ class PomodoroCalculator:
             date += datetime.timedelta(days=1)
 
         return date
+
+    def _get_item(self, offset, item_type):
+        """
+        Returns one of three types of Pomodori entities. A short break, a long
+        break or the Pomodoro itself. The returned dict also contains the
+        start and end datetimes.
+        """
+        types = {
+            'short-break': self.short_break_seconds,
+            'long-break': self.long_break_seconds,
+            'pomodoro': self.pomodoro_length,
+        }
+
+        start = self.end - datetime.timedelta(seconds=offset)
+        end = start + datetime.timedelta(seconds=types[item_type])
+
+        return {'type': item_type, 'start': start, 'end': end}
