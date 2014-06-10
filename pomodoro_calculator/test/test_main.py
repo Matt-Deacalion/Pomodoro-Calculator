@@ -102,3 +102,28 @@ class PomodoroTest(unittest.TestCase):
             PomodoroCalculator(end='18:30', start='19:30').end,
             datetime(2014, 1, 2, 18, 30),
         )
+
+    def test_short_break_seconds(self):
+        """
+        Does the `short_break_seconds` property work correctly?
+        """
+        calculator = PomodoroCalculator(end='18:00', short_break=10)
+
+        self.assertEqual(self.calculator.short_break_seconds, 5 * 60)
+        self.assertEqual(calculator.short_break_seconds, 10 * 60)
+
+    def test_long_break_seconds(self):
+        """
+        Does the `long_break_seconds` property work correctly?
+        """
+        calculator = PomodoroCalculator(end='18:00', long_break=10)
+
+        self.assertEqual(self.calculator.long_break_seconds, 15 * 60)
+        self.assertEqual(calculator.long_break_seconds, 10 * 60)
+
+    def test_total_seconds(self):
+        """
+        Does the `total_seconds` property work correctly?
+        """
+        calculator = PomodoroCalculator(end='18:00', start='18:15')
+        self.assertEqual(calculator.long_break_seconds, 15 * 60)

@@ -19,6 +19,28 @@ class PomodoroCalculator:
         self.short_break = short_break
         self.long_break = long_break
 
+    @property
+    def short_break_seconds(self):
+        """
+        Returns `short_break` in seconds.
+        """
+        return self.short_break * 60
+
+    @property
+    def long_break_seconds(self):
+        """
+        Returns `long_break` in seconds.
+        """
+        return self.long_break * 60
+
+    @property
+    def total_seconds(self):
+        """
+        Return the total time span in seconds.
+        """
+        delta = self.end - self.start
+        return int(delta.total_seconds())
+
     def _compare_times(self, a, b):
         """
         Returns True if the time string `a` is later than `b`.
