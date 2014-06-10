@@ -54,3 +54,21 @@ class PomodoroTest(unittest.TestCase):
             self.calculator._create_datetime('15:30:25', tomorrow=True),
             datetime(2014, 1, 2, 15, 30, 25),
         )
+
+    def test_compare_times(self):
+        """
+        Does `_compare_times` work correctly?
+        """
+        times = [
+            ('3', '5'),
+            ('03', '05'),
+            ('5:30', '6:30'),
+            ('05:0', '06:0'),
+            ('05:01', '06:00'),
+            ('05:01:05', '06:00:20'),
+            ('05:01:5', '06:00:2'),
+        ]
+
+        for t in times:
+            self.assertFalse(self.calculator._compare_times(t[0], t[1]))
+            self.assertTrue(self.calculator._compare_times(t[1], t[0]))
