@@ -24,6 +24,6 @@ class PomodoroCalculator:
         date = datetime.datetime.now().replace(**replace_args)
 
         if tomorrow:
-            date + datetime.timedelta(days=1)
+            date += datetime.timedelta(days=1)
 
         return date

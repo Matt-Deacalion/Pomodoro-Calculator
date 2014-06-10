@@ -7,7 +7,7 @@ from pomodoro_calculator import PomodoroCalculator
 class PomodoroTest(unittest.TestCase):
 
     def setUp(self):
-        self.calculator = PomodoroCalculator()
+        self.calculator = PomodoroCalculator(end='15:00')
 
     def test_retriever_class_exists(self):
         """
@@ -52,7 +52,7 @@ class PomodoroTest(unittest.TestCase):
         """
         self.assertEqual(
             self.calculator._create_datetime('15:30:25', tomorrow=True),
-            datetime(2014, 1, 2, 15, 30, 25),
+            datetime(2014, 1, 3, 15, 30, 25),
         )
 
     def test_compare_times(self):
