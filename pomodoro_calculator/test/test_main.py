@@ -228,6 +228,15 @@ class PomodoroTest(unittest.TestCase):
         for expectation in expected:
             self.assertEqual(expectation[0], expectation[1])
 
+    @freeze_time('2014-01-01 12:00:00')
+    def test_pomodori_does_not_overflow(self):
+        """
+        The `pomodori_schedule` method should not return any entities that go
+        past the time limit.
+        """
+        pomodori = PomodoroCalculator(end='15:00').pomodori_schedule()
+        self.assertLess(pomodori[-1]['end'], datetime(2014, 1, 1, 15))
+
     def test_pomodori_segment_generator(self):
         """
         Are 'segment' (Pomodori, short breaks and long breaks) strings
