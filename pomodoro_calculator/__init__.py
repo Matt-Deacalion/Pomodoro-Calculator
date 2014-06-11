@@ -82,3 +82,40 @@ class PomodoroCalculator:
         end = start + datetime.timedelta(seconds=types[item_type])
 
         return {'type': item_type, 'start': start, 'end': end}
+
+    def pomodori(self):
+        """
+        Returns a list of dicts of Pomodori and the related breaks inbetween.
+        """
+        pomodori = []
+        iterations = 0
+        seconds = self.total_seconds
+
+        if seconds < self.pomodoro_length:
+            return []
+
+        while seconds > 0:
+            # zero and even numbers are always Pomodori
+            if iterations % 2 == 0 or iterations == 0:
+                pomodori.append(self._get_item(seconds, 'pomodoro'))
+                seconds -= self.pomodoro_length
+            else:
+                quotient, remainder = divmod(iterations+1, 4)
+
+                # if the quotient is even and the remainder is zero, then we
+                # are just after a fourth Pomodori and should add a long break
+                if quotient % 2 == 0 and remainder == 0:
+                    pomodori.append(self._get_item(seconds, 'long-break'))
+                    seconds -= self.long_break_seconds
+                # otherwise, we're at a short break
+                else:
+                    pomodori.append(self._get_item(seconds, 'short-break'))
+                    seconds -= self.short_break_seconds
+
+            iterations += 1
+
+        # remove breaks that are not followed by a Pomodoro
+        if pomodori[-1].get('type') != 'pomodoro':
+            del pomodori[-1]
+
+        return pomodori

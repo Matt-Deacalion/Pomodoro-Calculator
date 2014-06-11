@@ -163,3 +163,59 @@ class PomodoroTest(unittest.TestCase):
                 'end': datetime(2014, 1, 1, 2, 15),
             },
         )
+
+    @freeze_time('2014-01-01 00:00:00')
+    def test_pomodori_empty(self):
+        """
+        Does the `pomodori` method return an empty list if there's no time?
+        """
+        self.assertListEqual(PomodoroCalculator(end='00:05').pomodori(), [])
+
+    @freeze_time('2014-01-01 00:00:00')
+    def test_pomodori_single_pomodoro(self):
+        """
+        Does the `pomodori` method return a single Pomodoro if there's just
+        enough time?
+        """
+        pomodori = PomodoroCalculator(end='00:25').pomodori()
+
+        self.assertEqual(len(pomodori), 1)
+        self.assertEqual(pomodori[0].get('type'), 'pomodoro')
+
+    @freeze_time('2014-01-01 00:00:00')
+    def test_pomodori_never_ends_with_break(self):
+        """
+        The list that the `pomodori` method returns can never end in a short
+        or long break.
+        """
+        times = [
+            '{:02d}:{:02d}'.format(h, m)
+            for m in range(0, 60)
+            for h in range(0, 24)
+        ]
+
+        for time in times:
+            pomodori = PomodoroCalculator(end=time).pomodori()
+
+            if pomodori:
+                self.assertEqual(pomodori[0].get('type'), 'pomodoro')
+                self.assertNotEqual(pomodori[0].get('type'), 'short-break')
+                self.assertNotEqual(pomodori[0].get('type'), 'long-break')
+
+    @freeze_time('2014-01-01 12:00:00')
+    def test_pomodori(self):
+        """
+        Does the `pomodori` method return the correct Pomodori entities?
+        """
+        pomodori = PomodoroCalculator(end='14:35').pomodori()
+
+        expected = [
+            (pomodori[-1]['start'], datetime(2014, 1, 1, 14, 10)),
+            (pomodori[-1]['end'], datetime(2014, 1, 1, 14, 35)),
+            (len([e for e in pomodori if e['type'] == 'pomodoro']), 5),
+            (len([e for e in pomodori if e['type'] == 'short-break']), 3),
+            (len([e for e in pomodori if e['type'] == 'long-break']), 1),
+        ]
+
+        for expectation in expected:
+            self.assertEqual(expectation[0], expectation[1])
