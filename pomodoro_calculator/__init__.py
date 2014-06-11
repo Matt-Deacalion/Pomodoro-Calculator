@@ -104,37 +104,27 @@ class PomodoroCalculator:
 
     def pomodori_schedule(self):
         """
-        Returns a list of dicts of Pomodori and the related breaks inbetween.
-        """
-        pomodori = []
-        iterations = 0
-        seconds = self.total_seconds
+        Returns a Pomodori schedule, which is a list consisting of Pomodori
+        segments (Pomodoro, short break or long break) in chronological order.
 
-        if seconds < self.pomodoro_length:
+        Credit: http://codereview.stackexchange.com/questions/53970
+        """
+        available_time = self.total_seconds
+        segments = []
+
+        if available_time < self.pomodoro_length:
             return []
 
-        while seconds > 0:
-            # zero and even numbers are always Pomodori
-            if iterations % 2 == 0 or iterations == 0:
-                pomodori.append(self._get_item(seconds, 'pomodoro'))
-                seconds -= self.pomodoro_length
-            else:
-                quotient, remainder = divmod(iterations+1, 4)
+        for segment_name in self.pomodori_segments():
+            segment = self._get_item(available_time, segment_name)
 
-                # if the quotient is even and the remainder is zero, then we
-                # are just after a fourth Pomodori and should add a long break
-                if quotient % 2 == 0 and remainder == 0:
-                    pomodori.append(self._get_item(seconds, 'long-break'))
-                    seconds -= self.long_break_seconds
-                # otherwise, we're at a short break
-                else:
-                    pomodori.append(self._get_item(seconds, 'short-break'))
-                    seconds -= self.short_break_seconds
+            if segment['time'] > available_time:
+                break
 
-            iterations += 1
+            available_time -= segment['time']
+            segments.append(segment)
 
-        # remove breaks that are not followed by a Pomodoro
-        if pomodori[-1].get('type') != 'pomodoro':
-            del pomodori[-1]
+        if segments and segments[-1]['type'].endswith('break'):
+            segments.pop()
 
-        return pomodori
+        return segments
