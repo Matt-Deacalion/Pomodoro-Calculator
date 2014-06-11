@@ -82,7 +82,12 @@ class PomodoroCalculator:
         start = self.end - datetime.timedelta(seconds=offset)
         end = start + datetime.timedelta(seconds=types[item_type])
 
-        return {'type': item_type, 'start': start, 'end': end}
+        return {
+            'type': item_type,
+            'start': start,
+            'end': end,
+            'time': int((end - start).total_seconds()),
+        }
 
     def pomodori_segments(self):
         """
