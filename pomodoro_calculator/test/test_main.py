@@ -219,3 +219,40 @@ class PomodoroTest(unittest.TestCase):
 
         for expectation in expected:
             self.assertEqual(expectation[0], expectation[1])
+
+    def test_pomodori_segment_generator(self):
+        """
+        Are 'segment' (Pomodori, short breaks and long breaks) strings
+        generated correctly?
+        """
+        segments = []
+        i = 0
+
+        for segment in self.calculator.pomodori_segments():
+            segments.append(segment)
+            i += 1
+
+            if i == 16:
+                break
+
+        self.assertListEqual(
+            segments,
+            [
+                'pomodoro',
+                'short-break',
+                'pomodoro',
+                'short-break',
+                'pomodoro',
+                'short-break',
+                'pomodoro',
+                'long-break',
+                'pomodoro',
+                'short-break',
+                'pomodoro',
+                'short-break',
+                'pomodoro',
+                'short-break',
+                'pomodoro',
+                'long-break',
+            ]
+        )

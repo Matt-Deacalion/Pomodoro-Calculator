@@ -1,4 +1,5 @@
 import datetime
+from itertools import cycle
 
 
 class PomodoroCalculator:
@@ -82,6 +83,19 @@ class PomodoroCalculator:
         end = start + datetime.timedelta(seconds=types[item_type])
 
         return {'type': item_type, 'start': start, 'end': end}
+
+    def pomodori_segments(self):
+        """
+        Generate Pomodori along with the short and long breaks in between.
+
+        Credit: http://codereview.stackexchange.com/questions/53970
+        """
+
+        # every fourth Pomodori precedes a long break,
+        # all others have short breaks following them
+        return cycle(
+            ['pomodoro', 'short-break'] * 3 + ['pomodoro', 'long-break'],
+        )
 
     def pomodori(self):
         """
