@@ -1,2 +1,14 @@
-.ropeproject/
+# Byte-compiled
 __pycache__/
+
+# Rope
+.ropeproject
+
+# IPython Notebook
+*.ipynb
+.ipynb_checkpoints/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
