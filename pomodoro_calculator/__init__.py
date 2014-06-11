@@ -102,7 +102,7 @@ class PomodoroCalculator:
             ['pomodoro', 'short-break'] * 3 + ['pomodoro', 'long-break'],
         )
 
-    def pomodori(self):
+    def pomodori_schedule(self):
         """
         Returns a list of dicts of Pomodori and the related breaks inbetween.
         """

@@ -170,17 +170,21 @@ class PomodoroTest(unittest.TestCase):
     @freeze_time('2014-01-01 00:00:00')
     def test_pomodori_empty(self):
         """
-        Does the `pomodori` method return an empty list if there's no time?
+        Does the `pomodori_schedule` method return an empty list if there's no
+        time?
         """
-        self.assertListEqual(PomodoroCalculator(end='00:05').pomodori(), [])
+        self.assertListEqual(
+            PomodoroCalculator(end='00:05').pomodori_schedule(),
+            [],
+        )
 
     @freeze_time('2014-01-01 00:00:00')
     def test_pomodori_single_pomodoro(self):
         """
-        Does the `pomodori` method return a single Pomodoro if there's just
-        enough time?
+        Does the `pomodori_schedule` method return a single Pomodoro if there's
+        just enough time?
         """
-        pomodori = PomodoroCalculator(end='00:25').pomodori()
+        pomodori = PomodoroCalculator(end='00:25').pomodori_schedule()
 
         self.assertEqual(len(pomodori), 1)
         self.assertEqual(pomodori[0].get('type'), 'pomodoro')
@@ -188,8 +192,8 @@ class PomodoroTest(unittest.TestCase):
     @freeze_time('2014-01-01 00:00:00')
     def test_pomodori_never_ends_with_break(self):
         """
-        The list that the `pomodori` method returns can never end in a short
-        or long break.
+        The list that the `pomodori_schedule` method returns can never end in a
+        short or long break.
         """
         times = [
             '{:02d}:{:02d}'.format(h, m)
@@ -198,7 +202,7 @@ class PomodoroTest(unittest.TestCase):
         ]
 
         for time in times:
-            pomodori = PomodoroCalculator(end=time).pomodori()
+            pomodori = PomodoroCalculator(end=time).pomodori_schedule()
 
             if pomodori:
                 self.assertEqual(pomodori[0].get('type'), 'pomodoro')
@@ -208,9 +212,10 @@ class PomodoroTest(unittest.TestCase):
     @freeze_time('2014-01-01 12:00:00')
     def test_pomodori(self):
         """
-        Does the `pomodori` method return the correct Pomodori entities?
+        Does the `pomodori_schedule` method return the correct Pomodori
+        entities?
         """
-        pomodori = PomodoroCalculator(end='14:35').pomodori()
+        pomodori = PomodoroCalculator(end='14:35').pomodori_schedule()
 
         expected = [
             (pomodori[-1]['start'], datetime(2014, 1, 1, 14, 10)),
