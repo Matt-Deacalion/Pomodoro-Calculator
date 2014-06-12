@@ -12,10 +12,56 @@ Options:
   -l, --long-break=<minutes>  the amount of minutes between every four Pomodori [default: 15].
 """
 from docopt import docopt
+from pomodoro_calculator import PomodoroCalculator
+from colorama import Fore, Style, init
 
 
 def main():
-    docopt(__doc__, version='0.2')
+    arguments = docopt(__doc__, version='0.2')
+
+    calc = PomodoroCalculator(
+        end=arguments['<end-time>'],
+        start=arguments['--from'],
+        short_break=int(arguments['--break']),
+        long_break=int(arguments['--long-break']),
+    )
+
+    colours = {
+        'pomodoro': Style.BRIGHT + Fore.RED,
+        'short-break': Fore.BLUE,
+        'long-break': Fore.CYAN,
+    }
+
+    init(autoreset=True)
+
+    pomodori_count = 0
+
+    for segment in calc.pomodori_schedule():
+        line_dict = {}
+
+        if segment['type'] == 'pomodoro':
+            pomodori_count += 1
+
+            line_dict['id'] = pomodori_count
+            line_dict['name'] = 'Pomodoro'
+
+        elif segment['type'] == 'short-break':
+            line_dict['id'] = ''
+            line_dict['name'] = 'short break'
+
+        else:
+            line_dict['id'] = ''
+            line_dict['name'] = 'long break'
+
+        line_dict['start'] = segment['start'].strftime('%H:%M')
+        line_dict['end'] = segment['end'].strftime('%H:%M')
+
+        line = "{id:>2} {name:<12} {start} ⇾ {end}".format(**line_dict)
+
+        print(colours[segment['type']] + line)
+
+    total = '{:>26} {:>2}'.format('Total Pomodori:', pomodori_count)
+    print(Style.BRIGHT + Fore.WHITE + total)
 
 if __name__ == '__main__':
     main()
