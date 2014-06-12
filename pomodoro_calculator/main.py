@@ -14,12 +14,12 @@ Options:
   -l, --long-break=<minutes>  the amount of minutes between every four Pomodori [default: 15].
 """
 from docopt import docopt
-from pomodoro_calculator import PomodoroCalculator
+from pomodoro_calculator import PomodoroCalculator, __version__
 from colorama import Fore, Style, init
 
 
 def main():
-    arguments = docopt(__doc__, version='0.2')
+    arguments = docopt(__doc__, version=__version__)
 
     calc = PomodoroCalculator(
         end=arguments['<end-time>'],
