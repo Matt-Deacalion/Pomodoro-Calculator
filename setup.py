@@ -19,6 +19,10 @@ setup(
             'get-pomodori = pomodoro_calculator.main:main',
         ],
     },
+    install_requires=[
+        'colorama>=0.3.1',
+        'docopt>=0.6.1',
+    ],
     tests_require=[
         'py>=1.4.20',
         'pytest>=2.5.2',
