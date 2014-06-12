@@ -6,6 +6,10 @@ Pomodoro Calculator
 
 Command line tool to calculate the number of Pomodori available between two points in time.
 
+.. image:: https://raw.github.com/Matt-Stevens/Pomodoro-Calculator/screenshots/screenshot.png
+    :alt: Pomodoro Calculator screenshot
+    :align: center
+
 Installation
 ------------
 You can install pomodoro-calculator using pip::
