@@ -11,7 +11,7 @@ from itertools import cycle
 
 class PomodoroCalculator:
     """
-    Calculates the number of pomodoros available in an amount of time.
+    Calculates the number of Pomodori available in an amount of time.
     """
     pomodoro_length = 25 * 60
 
