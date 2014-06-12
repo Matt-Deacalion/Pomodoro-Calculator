@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """Calculate the number of Pomodori available within a time period.
 
 Usage:
