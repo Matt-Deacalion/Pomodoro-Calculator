@@ -1,16 +1,16 @@
 ===================
 Pomodoro Calculator
 ===================
-.. image:: https://travis-ci.org/Matt-Deacalion/Pomodoro-Calculator.svg?branch=master
+.. image:: https://travis-ci.org/Matt-Deacalion/Pomodoro-Calculator.svg?branch=master&new
     :target: https://travis-ci.org/Matt-Deacalion/Pomodoro-Calculator
     :alt: Build Status
-.. image:: https://coveralls.io/repos/Matt-Deacalion/Pomodoro-Calculator/badge.png?branch=master
+.. image:: https://coveralls.io/repos/Matt-Deacalion/Pomodoro-Calculator/badge.png?branch=master&new
     :target: https://coveralls.io/r/Matt-Deacalion/Pomodoro-Calculator?branch=master
     :alt: Test Coverage
-.. image:: https://pypip.in/download/pomodoro-calculator/badge.png?period=week
+.. image:: https://pypip.in/download/pomodoro-calculator/badge.png?period=week&new
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: Downloads
-.. image:: https://pypip.in/version/pomodoro-calculator/badge.png
+.. image:: https://pypip.in/version/pomodoro-calculator/badge.png?new
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: Latest Version
 .. image:: https://pypip.in/wheel/pomodoro-calculator/badge.png
