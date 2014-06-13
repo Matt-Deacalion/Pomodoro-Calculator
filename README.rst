@@ -1,11 +1,11 @@
 ===================
 Pomodoro Calculator
 ===================
-.. image:: https://travis-ci.org/Matt-Stevens/Pomodoro-Calculator.svg?branch=master
-    :target: https://travis-ci.org/Matt-Stevens/Pomodoro-Calculator
+.. image:: https://travis-ci.org/Matt-Deacalion/Pomodoro-Calculator.svg?branch=master
+    :target: https://travis-ci.org/Matt-Deacalion/Pomodoro-Calculator
     :alt: Build Status
-.. image:: https://coveralls.io/repos/Matt-Stevens/Pomodoro-Calculator/badge.png?branch=master
-    :target: https://coveralls.io/r/Matt-Stevens/Pomodoro-Calculator?branch=master
+.. image:: https://coveralls.io/repos/Matt-Deacalion/Pomodoro-Calculator/badge.png?branch=master
+    :target: https://coveralls.io/r/Matt-Deacalion/Pomodoro-Calculator?branch=master
     :alt: Test Coverage
 .. image:: https://pypip.in/download/pomodoro-calculator/badge.png?period=week
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
@@ -22,7 +22,7 @@ Pomodoro Calculator
 
 Command line tool to calculate the number of Pomodori available between two points in time.
 
-.. image:: https://raw.github.com/Matt-Stevens/Pomodoro-Calculator/screenshots/screenshot.png
+.. image:: https://raw.github.com/Matt-Deacalion/Pomodoro-Calculator/screenshots/screenshot.png
     :alt: Pomodoro Calculator screenshot
     :align: center
 
