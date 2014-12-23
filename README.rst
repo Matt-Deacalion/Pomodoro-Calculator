@@ -20,7 +20,8 @@ Pomodoro Calculator
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: License
 
-Command line tool to calculate the number of Pomodori available between two points in time.
+A pretty command line tool to calculate the number of Pomodori available between
+two points in time.
 
 .. image:: https://raw.github.com/Matt-Deacalion/Pomodoro-Calculator/screenshots/screenshot.png
     :alt: Pomodoro Calculator screenshot
@@ -34,7 +35,7 @@ You can install pomodoro-calculator using pip::
 
 Usage
 -----
-You can use the `get-pomodori` command from the shell to run the Pomodoro Calculator::
+Use the `get-pomodori` command from the shell to run the Pomodoro Calculator::
 
     $ get-pomodori --help
 

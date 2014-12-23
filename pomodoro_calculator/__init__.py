@@ -1,6 +1,6 @@
 """
-Command line tool to calculate the number of
-Pomodori available between two points in time.
+A pretty command line tool to calculate the number
+of Pomodori available between two points in time.
 """
 __author__ = 'Matt Deacalion Stevens'
 __version__ = '0.3.6'
