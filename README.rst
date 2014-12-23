@@ -53,7 +53,7 @@ You can use the `get-pomodori` command from the shell to run the Pomodoro Calcul
 
 Licence
 -------
-Copyright © 2014 `Matt Deacalion Stevens`_, released under The `MIT License`_.
+Copyright © 2015 `Matt Deacalion Stevens`_, released under The `MIT License`_.
 
 .. _Matt Deacalion Stevens: http://dirtymonkey.co.uk
 .. _MIT License: http://deacalion.mit-license.org
