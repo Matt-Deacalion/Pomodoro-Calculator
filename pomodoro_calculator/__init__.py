@@ -13,9 +13,11 @@ class PomodoroCalculator:
     """
     Calculates the number of Pomodori available in an amount of time.
     """
-    pomodoro_length = 25 * 60
 
-    def __init__(self, end, start='now', short_break=5, long_break=15):
+    def __init__(self, end, start='now', short_break=5, long_break=15,
+                 pomodoro_length=25, group_length=4):
+        self.pomodoro_length_seconds = pomodoro_length * 60
+
         if start == 'now':
             start = datetime.datetime.now().strftime('%H:%M:%S')
 
@@ -26,6 +28,7 @@ class PomodoroCalculator:
             self.end = self._create_datetime(end)
 
         self.start = self._create_datetime(start)
+        self.group_length = group_length
         self.short_break = short_break
         self.long_break = long_break
 
@@ -83,7 +86,7 @@ class PomodoroCalculator:
         types = {
             'short-break': self.short_break_seconds,
             'long-break': self.long_break_seconds,
-            'pomodoro': self.pomodoro_length,
+            'pomodoro': self.pomodoro_length_seconds,
         }
 
         start = self.end - datetime.timedelta(seconds=offset)
@@ -96,7 +99,7 @@ class PomodoroCalculator:
             'time': int((end - start).total_seconds()),
         }
 
-    def pomodori_segments(self):
+    def pomodori_segments(self, group_length=4):
         """
         Generate Pomodori along with the short and long breaks in between.
 
@@ -106,7 +109,7 @@ class PomodoroCalculator:
         # every fourth Pomodori precedes a long break,
         # all others have short breaks following them
         return cycle(
-            ['pomodoro', 'short-break'] * 3 + ['pomodoro', 'long-break'],
+            ['pomodoro', 'short-break'] * (group_length - 1) + ['pomodoro', 'long-break'],
         )
 
     def pomodori_schedule(self):
@@ -119,10 +122,10 @@ class PomodoroCalculator:
         available_time = self.total_seconds
         segments = []
 
-        if available_time < self.pomodoro_length:
+        if available_time < self.pomodoro_length_seconds:
             return []
 
-        for segment_name in self.pomodori_segments():
+        for segment_name in self.pomodori_segments(self.group_length):
             segment = self._get_item(available_time, segment_name)
 
             if segment['time'] > available_time:
