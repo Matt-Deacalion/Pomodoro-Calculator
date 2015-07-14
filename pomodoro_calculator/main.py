@@ -3,7 +3,8 @@
 """Calculate the number of Pomodori available within a time period.
 
 Usage:
-  get-pomodori [--from=<time>] [--break=<minutes>] [--long-break=<minutes>] <end-time>
+  get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>]
+               [--long-break=<minutes>] [--group=<pomodori>] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
@@ -12,6 +13,8 @@ Options:
   -f, --from=<time>           calculate available Pomodori from this time [default: now].
   -b, --break=<minutes>       the amount of minutes between each Pomodori [default: 5].
   -l, --long-break=<minutes>  the amount of minutes between every four Pomodori [default: 15].
+  -p, --pomodoro=<minutes>    the amount of minutes for every pomodoro session [default: 25].
+  -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
 """
 from docopt import docopt
 from pomodoro_calculator import PomodoroCalculator, __version__
@@ -24,6 +27,8 @@ def main():
     calc = PomodoroCalculator(
         end=arguments['<end-time>'],
         start=arguments['--from'],
+        pomodoro_length=int(arguments['--pomodoro']),
+        group_length=int(arguments['--group']),
         short_break=int(arguments['--break']),
         long_break=int(arguments['--long-break']),
     )
