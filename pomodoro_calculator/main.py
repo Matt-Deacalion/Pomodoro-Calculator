@@ -64,10 +64,13 @@ def main():
         line_dict['end'] = segment['end'].strftime('%H:%M')
 
         line = "{id:>2} {name:<12} {start} ⇾ {end}".format(**line_dict)
-
         print(colours[segment['type']] + line)
 
     total = '{:>26} {:>2}'.format('Total Pomodori:', pomodori_count)
+    print(Style.BRIGHT + Fore.WHITE + total)
+
+    hours = round(pomodori_count * int(arguments['--pomodoro']) / 60, 1)
+    total = '{:>26} {:>2}h'.format('Total Work:', hours)
     print(Style.BRIGHT + Fore.WHITE + total)
 
 if __name__ == '__main__':
