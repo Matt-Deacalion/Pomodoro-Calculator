@@ -7,16 +7,16 @@ Pomodoro Calculator
 .. image:: https://coveralls.io/repos/Matt-Deacalion/Pomodoro-Calculator/badge.png?branch=master&new
     :target: https://coveralls.io/r/Matt-Deacalion/Pomodoro-Calculator?branch=master
     :alt: Test Coverage
-.. image:: https://pypip.in/download/pomodoro-calculator/badge.png?period=week&new
+.. image:: https://img.shields.io/pypi/dw/pomodoro-calculator.svg
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: Downloads
-.. image:: https://pypip.in/version/pomodoro-calculator/badge.png?new
+.. image:: https://img.shields.io/pypi/v/pomodoro-calculator.svg
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: Latest Version
-.. image:: https://pypip.in/wheel/pomodoro-calculator/badge.png
+.. image:: https://img.shields.io/pypi/wheel/pomodoro-calculator.svg
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: Wheel Status
-.. image:: https://pypip.in/license/pomodoro-calculator/badge.png
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://pypi.python.org/pypi/pomodoro-calculator/
     :alt: License
 
