@@ -26,7 +26,7 @@ setup(
     tests_require=[
         'py>=1.4.20',
         'pytest>=2.5.2',
-        'freezegun>=0.1.18',
+        'freezegun>=0.3.5',
         'python-dateutil>=2.2',
     ],
     classifiers=[
