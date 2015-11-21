@@ -4,11 +4,12 @@
 
 Usage:
   get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>]
-               [--long-break=<minutes>] [--group=<pomodori>] <end-time>
+               [--long-break=<minutes>] [--group=<pomodori>] [-i] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
   --version                   show program's version number and exit.
+  -i                          specify that <endtime> will be used as delta time interval.
   -h, --help                  show this help message and exit.
   -f, --from=<time>           calculate available Pomodori from this time [default: now].
   -b, --break=<minutes>       the amount of minutes between each Pomodori [default: 5].
@@ -23,7 +24,7 @@ from colorama import Fore, Style, init
 
 def main():
     arguments = docopt(__doc__, version=__version__)
-
+    
     calc = PomodoroCalculator(
         end=arguments['<end-time>'],
         start=arguments['--from'],
@@ -31,6 +32,7 @@ def main():
         group_length=int(arguments['--group']),
         short_break=int(arguments['--break']),
         long_break=int(arguments['--long-break']),
+        time_interval=(arguments['-i']),
     )
 
     colours = {

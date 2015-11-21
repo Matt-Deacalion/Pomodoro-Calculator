@@ -273,3 +273,28 @@ class PomodoroTest(unittest.TestCase):
                 'long-break',
             ]
         )
+
+    @freeze_time('2014-01-01 12:00:00')
+    def test_create_datetime_with_interval(self):
+        self.assertEqual(
+            self.calculator._create_datetime_with_interval(datetime.now(), "02:00"),
+            datetime(2014, 1, 1, 14),
+        )
+
+    def test_create_time_dict(self):
+        self.assertDictEqual(
+            self.calculator._create_time_dict("02:00:01"),
+            {   
+                'hour':2,
+                'minute':0,
+                'second':1,
+
+            }
+        )
+
+    def test_interval_option(self):
+        pomodori = PomodoroCalculator(end='00:55',time_interval=True)
+        segments = pomodori.pomodori_schedule()
+        self.assertEqual(len(segments), 3)
+
+
