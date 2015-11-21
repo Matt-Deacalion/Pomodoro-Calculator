@@ -13,21 +13,25 @@ class PomodoroCalculator:
     """
     Calculates the number of Pomodori available in an amount of time.
     """
-
     def __init__(self, end, start='now', short_break=5, long_break=15,
-                 pomodoro_length=25, group_length=4):
+                 pomodoro_length=25, group_length=4, interval=False):
         self.pomodoro_length_seconds = pomodoro_length * 60
 
         if start == 'now':
-            start = datetime.datetime.now().strftime('%H:%M:%S')
+            self.start = datetime.datetime.now()
+        else:
+            self.start = self._create_datetime(start)
 
-        # if the end time is earlier than the start, overlap to the next day
-        if self._compare_times(start, end):
-            self.end = self._create_datetime(end, tomorrow=True)
+        if interval:
+            self.end = self.start + self._create_timedelta(end)
         else:
             self.end = self._create_datetime(end)
 
-        self.start = self._create_datetime(start)
+            # if the end time is earlier than the start,
+            # overlap to the next day
+            if self.end.time() < self.start.time():
+                self.end += datetime.timedelta(days=1)
+
         self.group_length = group_length
         self.short_break = short_break
         self.long_break = long_break
@@ -54,28 +58,27 @@ class PomodoroCalculator:
         delta = self.end - self.start
         return int(delta.total_seconds())
 
-    def _compare_times(self, a, b):
+    def _create_timedelta(self, time_string):
         """
-        Returns True if the time string `a` is later than `b`.
+        Takes a string in the format of 'HH:MM:SS' and returns a timedelta.
         """
-        return [int(i) for i in a.split(':')] > [int(i) for i in b.split(':')]
+        args = dict(zip(
+            ['hours', 'minutes', 'seconds'],
+            [int(unit) for unit in time_string.split(':')],
+        ))
 
-    def _create_datetime(self, time_string, tomorrow=False):
+        return datetime.timedelta(**args)
+
+    def _create_datetime(self, time_string):
         """
-        Takes a string in the format of 'HH:MM:SS' and returns a datetime. If
-        `tomorrow` is True it adds another day to the result.
+        Takes a string in the format of 'HH:MM:SS' and returns a datetime.
         """
-        replace_args = dict(zip(
+        args = dict(zip(
             ['hour', 'minute', 'second'],
             [int(unit) for unit in time_string.split(':')],
         ))
 
-        date = datetime.datetime.now().replace(**replace_args)
-
-        if tomorrow:
-            date += datetime.timedelta(days=1)
-
-        return date
+        return datetime.datetime.now().replace(**args)
 
     def _get_item(self, offset, item_type):
         """

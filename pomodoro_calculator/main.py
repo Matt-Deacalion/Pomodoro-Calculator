@@ -4,21 +4,22 @@
 
 Usage:
   get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>]
-               [--long-break=<minutes>] [--group=<pomodori>] <end-time>
+               [--long-break=<minutes>] [--group=<pomodori>] [--interval] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
   --version                   show program's version number and exit.
   -h, --help                  show this help message and exit.
+  -i, --interval              specify that the end time is a time interval, not a time of day.
   -f, --from=<time>           calculate available Pomodori from this time [default: now].
   -b, --break=<minutes>       the amount of minutes between each Pomodori [default: 5].
   -l, --long-break=<minutes>  the amount of minutes between every four Pomodori [default: 15].
   -p, --pomodoro=<minutes>    the amount of minutes for every pomodoro session [default: 25].
   -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
 """
+from colorama import Fore, Style, init
 from docopt import docopt
 from pomodoro_calculator import PomodoroCalculator, __version__
-from colorama import Fore, Style, init
 
 
 def main():
@@ -31,6 +32,7 @@ def main():
         group_length=int(arguments['--group']),
         short_break=int(arguments['--break']),
         long_break=int(arguments['--long-break']),
+        interval=arguments['--interval'],
     )
 
     colours = {
