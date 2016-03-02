@@ -2,9 +2,8 @@ import unittest
 from datetime import datetime, timedelta
 from itertools import islice
 
-from pomodoro_calculator import PomodoroCalculator
-
 from freezegun import freeze_time
+from pomodoro_calculator import PomodoroCalculator
 
 
 class PomodoroTest(unittest.TestCase):
@@ -144,32 +143,38 @@ class PomodoroTest(unittest.TestCase):
         long_break = PomodoroCalculator(end='03:00')
 
         self.assertDictEqual(
-            pomodoro._get_item(3600, 'pomodoro'),
+            pomodoro._get_item(3600, 'pomodoro', 1),
             {
+                'index': 1,
+                'pomodori-index': 1,
                 'type': 'pomodoro',
                 'start': datetime(2014, 1, 1, 2),
                 'end': datetime(2014, 1, 1, 2, 25),
-                'time': 1500,
+                'length': 1500,
             },
         )
 
         self.assertDictEqual(
-            short_break._get_item(3600, 'short-break'),
+            short_break._get_item(3600, 'short-break', 2),
             {
+                'index': 2,
+                'pomodori-index': 1,
                 'type': 'short-break',
                 'start': datetime(2014, 1, 1, 2),
                 'end': datetime(2014, 1, 1, 2, 5),
-                'time': 300,
+                'length': 300,
             },
         )
 
         self.assertDictEqual(
-            long_break._get_item(3600, 'long-break'),
+            long_break._get_item(3600, 'long-break', 3),
             {
+                'index': 3,
+                'pomodori-index': 2,
                 'type': 'long-break',
                 'start': datetime(2014, 1, 1, 2),
                 'end': datetime(2014, 1, 1, 2, 15),
-                'time': 900,
+                'length': 900,
             },
         )
 
@@ -192,8 +197,8 @@ class PomodoroTest(unittest.TestCase):
         """
         pomodori = PomodoroCalculator(end='00:25').pomodori_schedule()
 
-        self.assertEqual(len(pomodori), 1)
-        self.assertEqual(pomodori[0].get('type'), 'pomodoro')
+        self.assertEqual(len(pomodori['segments']), 1)
+        self.assertEqual(pomodori['segments'][0].get('type'), 'pomodoro')
 
     @freeze_time('2014-01-01 00:00:00')
     def test_pomodori_never_ends_with_break(self):
@@ -211,9 +216,18 @@ class PomodoroTest(unittest.TestCase):
             pomodori = PomodoroCalculator(end=time).pomodori_schedule()
 
             if pomodori:
-                self.assertEqual(pomodori[0].get('type'), 'pomodoro')
-                self.assertNotEqual(pomodori[0].get('type'), 'short-break')
-                self.assertNotEqual(pomodori[0].get('type'), 'long-break')
+                self.assertEqual(
+                    pomodori['segments'][0].get('type'),
+                    'pomodoro',
+                )
+                self.assertNotEqual(
+                    pomodori['segments'][0].get('type'),
+                    'short-break',
+                )
+                self.assertNotEqual(
+                    pomodori['segments'][0].get('type'),
+                    'long-break',
+                )
 
     @freeze_time('2014-01-01 12:00:00')
     def test_pomodori(self):
@@ -223,16 +237,39 @@ class PomodoroTest(unittest.TestCase):
         """
         pomodori = PomodoroCalculator(end='14:35').pomodori_schedule()
 
-        expected = [
-            (pomodori[-1]['start'], datetime(2014, 1, 1, 14, 10)),
-            (pomodori[-1]['end'], datetime(2014, 1, 1, 14, 35)),
-            (len([e for e in pomodori if e['type'] == 'pomodoro']), 5),
-            (len([e for e in pomodori if e['type'] == 'short-break']), 3),
-            (len([e for e in pomodori if e['type'] == 'long-break']), 1),
+        expected_segments = [
+            (pomodori['segments'][-1]['start'], datetime(2014, 1, 1, 14, 10)),
+            (pomodori['segments'][-1]['end'], datetime(2014, 1, 1, 14, 35)),
+            (len([e for e in pomodori['segments'] if e['type'] == 'pomodoro']), 5),
+            (len([e for e in pomodori['segments'] if e['type'] == 'short-break']), 3),
+            (len([e for e in pomodori['segments'] if e['type'] == 'long-break']), 1),
         ]
 
-        for expectation in expected:
-            self.assertEqual(expectation[0], expectation[1])
+        for expected_segment in expected_segments:
+            self.assertEqual(expected_segment[0], expected_segment[1])
+
+    @freeze_time('2014-01-01 12:00:00')
+    def test_pomodori_meta_data(self):
+        """
+        Does the `pomodori_schedule` method return the correct meta
+        data about the Pomodori entities?
+        """
+        pomodori = PomodoroCalculator(end='14:36').pomodori_schedule()
+
+        del pomodori['segments']
+
+        self.assertDictEqual(
+            pomodori,
+            {
+                'end': datetime(2014, 1, 1, 14, 35),
+                'start': datetime(2014, 1, 1, 12, 0),
+                'seconds-per-pomodoro': 1500,
+                'total-breaks': 4,
+                'total-pomodori': 5,
+                'total-rest-time': 1800,
+                'total-work-time': 7500,
+            },
+        )
 
     @freeze_time('2014-01-01 12:00:00')
     def test_pomodori_does_not_overflow(self):
@@ -241,7 +278,9 @@ class PomodoroTest(unittest.TestCase):
         past the time limit.
         """
         pomodori = PomodoroCalculator(end='15:00').pomodori_schedule()
-        self.assertLess(pomodori[-1]['end'], datetime(2014, 1, 1, 15))
+        self.assertLess(
+            pomodori['segments'][-1]['end'], datetime(2014, 1, 1, 15)
+        )
 
     def test_pomodori_segment_generator(self):
         """

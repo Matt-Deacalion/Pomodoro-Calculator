@@ -7,6 +7,7 @@ __version__ = '0.3.9'
 
 import datetime
 from itertools import cycle
+from math import ceil
 
 
 class PomodoroCalculator:
@@ -80,7 +81,7 @@ class PomodoroCalculator:
 
         return datetime.datetime.now().replace(**args)
 
-    def _get_item(self, offset, item_type):
+    def _get_item(self, offset, item_type, index):
         """
         Returns one of three types of Pomodori entities. A short break, a long
         break or the Pomodoro itself. The returned dict also contains the
@@ -96,10 +97,12 @@ class PomodoroCalculator:
         end = start + datetime.timedelta(seconds=types[item_type])
 
         return {
+            'index': index,
+            'pomodori-index': ceil(index / 2),
             'type': item_type,
             'start': start,
             'end': end,
-            'time': int((end - start).total_seconds()),
+            'length': int((end - start).total_seconds()),
         }
 
     def pomodori_segments(self, group_length=4):
@@ -117,8 +120,9 @@ class PomodoroCalculator:
 
     def pomodori_schedule(self):
         """
-        Returns a Pomodori schedule, which is a list consisting of Pomodori
-        segments (Pomodoro, short break or long break) in chronological order.
+        Returns a Pomodori schedule, which is a dict that contains a
+        list of Pomodori segments (Pomodoro, short break or long
+        break) in chronological order.
 
         Credit: http://codereview.stackexchange.com/questions/53970
         """
@@ -128,16 +132,28 @@ class PomodoroCalculator:
         if available_time < self.pomodoro_length_seconds:
             return []
 
-        for segment_name in self.pomodori_segments(self.group_length):
-            segment = self._get_item(available_time, segment_name)
+        for i, segment_name in enumerate(self.pomodori_segments(self.group_length)):
+            segment = self._get_item(available_time, segment_name, i + 1)
 
-            if segment['time'] > available_time:
+            if segment['length'] > available_time:
                 break
 
-            available_time -= segment['time']
+            available_time -= segment['length']
             segments.append(segment)
 
         if segments and segments[-1]['type'].endswith('break'):
             segments.pop()
 
-        return segments
+        work_segments = [seg for seg in segments if seg['type'] == 'pomodoro']
+        rest_segments = [seg for seg in segments if seg['type'].endswith('break')]
+
+        return {
+            'segments': segments,
+            'start': self.start,
+            'end': segments[-1]['end'],
+            'seconds-per-pomodoro': self.pomodoro_length_seconds,
+            'total-pomodori': len(work_segments),
+            'total-breaks': len(rest_segments),
+            'total-rest-time': sum(seg['length'] for seg in rest_segments),
+            'total-work-time': sum(seg['length'] for seg in work_segments),
+        }
