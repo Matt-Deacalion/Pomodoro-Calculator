@@ -1,8 +1,10 @@
 import unittest
 from datetime import datetime, timedelta
+from itertools import islice
+
+from pomodoro_calculator import PomodoroCalculator
 
 from freezegun import freeze_time
-from pomodoro_calculator import PomodoroCalculator
 
 
 class PomodoroTest(unittest.TestCase):
@@ -246,18 +248,8 @@ class PomodoroTest(unittest.TestCase):
         Are 'segment' (Pomodori, short breaks and long breaks) strings
         generated correctly?
         """
-        segments = []
-        i = 0
-
-        for segment in self.calculator.pomodori_segments():
-            segments.append(segment)
-            i += 1
-
-            if i == 16:
-                break
-
         self.assertListEqual(
-            segments,
+            list(islice(self.calculator.pomodori_segments(), 16)),
             [
                 'pomodoro',
                 'short-break',
