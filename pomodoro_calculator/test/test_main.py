@@ -151,7 +151,7 @@ class PomodoroTest(unittest.TestCase):
                 'type': 'pomodoro',
                 'start': datetime(2014, 1, 1, 2, 1),
                 'end': datetime(2014, 1, 1, 2, 26),
-                'length': 1560,
+                'length': 1500,
             },
         )
 
@@ -163,7 +163,7 @@ class PomodoroTest(unittest.TestCase):
                 'type': 'short-break',
                 'start': datetime(2014, 1, 1, 2, 1),
                 'end': datetime(2014, 1, 1, 2, 6),
-                'length': 360,
+                'length': 300,
             },
         )
 
@@ -175,7 +175,7 @@ class PomodoroTest(unittest.TestCase):
                 'type': 'long-break',
                 'start': datetime(2014, 1, 1, 2, 1),
                 'end': datetime(2014, 1, 1, 2, 16),
-                'length': 960,
+                'length': 900,
             },
         )
 
@@ -266,8 +266,8 @@ class PomodoroTest(unittest.TestCase):
                 'seconds-per-pomodoro': 1500,
                 'total-breaks': 3,
                 'total-pomodori': 4,
-                'total-rest-time': 1080,
-                'total-work-time': 6240,
+                'total-rest-time': 900,
+                'total-work-time': 6000,
             },
         )
 

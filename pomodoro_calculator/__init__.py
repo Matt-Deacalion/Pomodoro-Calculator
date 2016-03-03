@@ -103,8 +103,7 @@ class PomodoroCalculator:
             'type': item_type,
             'start': start,
             'end': end,
-            # the `60` is so each segment rolls over to the next min
-            'length': int((end - start).total_seconds()) + 60,
+            'length': int((end - start).total_seconds()),
         }
 
     def pomodori_segments(self, group_length=4):
@@ -142,7 +141,9 @@ class PomodoroCalculator:
             if segment['length'] > available_time:
                 break
 
-            available_time -= segment['length']
+            # the `60` is so each segment rolls over to the next minute
+            available_time -= segment['length'] + 60
+
             segments.append(segment)
 
         if segments and segments[-1]['type'].endswith('break'):
