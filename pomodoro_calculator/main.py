@@ -19,17 +19,10 @@ Options:
 """
 from __future__ import print_function
 
-import sys
-
 from colorama import Fore, Style, init
 from docopt import docopt
 
 from pomodoro_calculator import PomodoroCalculator, __version__
-
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
 
 
 def report_output(schedule):
@@ -37,17 +30,12 @@ def report_output(schedule):
     Takes a Pomodori schedule and returns a pretty, report style
     string that can be printed to the terminal or piped elsewhere.
     """
+    lines = []
     colours = {
         'pomodoro': Style.BRIGHT + Fore.RED,
         'short-break': Fore.BLUE,
         'long-break': Fore.CYAN,
     }
-
-    output = StringIO()
-
-    # backup previous standard output, redirect new one to our string
-    stdout = sys.stdout
-    sys.stdout = output
 
     init(autoreset=True)
 
@@ -69,26 +57,20 @@ def report_output(schedule):
         line_dict['start'] = segment['start'].strftime('%H:%M')
         line_dict['end'] = segment['end'].strftime('%H:%M')
 
-        line = "{id:>2} {name:<12} {start} ⇾ {end}".format(**line_dict)
-        print(colours[segment['type']] + line)
+        line = '{id:>2} {name:<12} {start} ⇾ {end}'.format(**line_dict)
+        lines.append(colours[segment['type']] + line)
 
-    total = '{:>26} {:>2}'.format(
-        'Total Pomodori:',
-        schedule['total-pomodori'],
-    )
-    print(Style.BRIGHT + Fore.WHITE + total)
+    total = '{:>26} {:>2}'.format('Total Pomodori:', schedule['total-pomodori'])
+    lines.append(Style.BRIGHT + Fore.WHITE + total)
 
     hours = round(
         schedule['total-pomodori'] * schedule['seconds-per-pomodoro'] / 60 / 60,
         1,
     )
     total = '{:>26} {:>2}h'.format('Total Work:', hours)
-    print(Style.BRIGHT + Fore.WHITE + total)
+    lines.append(Style.BRIGHT + Fore.WHITE + total)
 
-    # restore the previous standard output
-    sys.stdout = stdout
-
-    return output.getvalue()
+    return '\n'.join(lines)
 
 
 def main():
@@ -104,8 +86,7 @@ def main():
         interval=arguments['--interval'],
     )
 
-    print(report_output(calc.pomodori_schedule()), end='')
-    sys.stdout.flush()
+    print(report_output(calc.pomodori_schedule()))
 
 if __name__ == '__main__':
     main()

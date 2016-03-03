@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from itertools import islice
 
 from freezegun import freeze_time
+
 from pomodoro_calculator import PomodoroCalculator
 
 
@@ -158,7 +159,7 @@ class PomodoroTest(unittest.TestCase):
             short_break._get_item(3600, 'short-break', 2),
             {
                 'index': 2,
-                'pomodori-index': 1,
+                'pomodori-index': 2,
                 'type': 'short-break',
                 'start': datetime(2014, 1, 1, 2),
                 'end': datetime(2014, 1, 1, 2, 5),

@@ -7,7 +7,6 @@ __version__ = '0.3.9'
 
 import datetime
 from itertools import cycle
-from math import ceil
 
 
 class PomodoroCalculator:
@@ -98,7 +97,7 @@ class PomodoroCalculator:
 
         return {
             'index': index,
-            'pomodori-index': ceil(index / 2),
+            'pomodori-index': index // 2 + 1,
             'type': item_type,
             'start': start,
             'end': end,
