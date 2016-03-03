@@ -149,9 +149,9 @@ class PomodoroTest(unittest.TestCase):
                 'index': 1,
                 'pomodori-index': 1,
                 'type': 'pomodoro',
-                'start': datetime(2014, 1, 1, 2),
-                'end': datetime(2014, 1, 1, 2, 25),
-                'length': 1500,
+                'start': datetime(2014, 1, 1, 2, 1),
+                'end': datetime(2014, 1, 1, 2, 26),
+                'length': 1560,
             },
         )
 
@@ -161,9 +161,9 @@ class PomodoroTest(unittest.TestCase):
                 'index': 2,
                 'pomodori-index': 2,
                 'type': 'short-break',
-                'start': datetime(2014, 1, 1, 2),
-                'end': datetime(2014, 1, 1, 2, 5),
-                'length': 300,
+                'start': datetime(2014, 1, 1, 2, 1),
+                'end': datetime(2014, 1, 1, 2, 6),
+                'length': 360,
             },
         )
 
@@ -173,9 +173,9 @@ class PomodoroTest(unittest.TestCase):
                 'index': 3,
                 'pomodori-index': 2,
                 'type': 'long-break',
-                'start': datetime(2014, 1, 1, 2),
-                'end': datetime(2014, 1, 1, 2, 15),
-                'length': 900,
+                'start': datetime(2014, 1, 1, 2, 1),
+                'end': datetime(2014, 1, 1, 2, 16),
+                'length': 960,
             },
         )
 
@@ -195,7 +195,7 @@ class PomodoroTest(unittest.TestCase):
         Does the `pomodori_schedule` method return a single Pomodoro if there's
         just enough time?
         """
-        pomodori = PomodoroCalculator(end='00:25').pomodori_schedule()
+        pomodori = PomodoroCalculator(end='00:26').pomodori_schedule()
 
         self.assertEqual(len(pomodori['segments']), 1)
         self.assertEqual(pomodori['segments'][0].get('type'), 'pomodoro')
@@ -235,11 +235,11 @@ class PomodoroTest(unittest.TestCase):
         Does the `pomodori_schedule` method return the correct Pomodori
         entities?
         """
-        pomodori = PomodoroCalculator(end='14:35').pomodori_schedule()
+        pomodori = PomodoroCalculator(end='14:50').pomodori_schedule()
 
         expected_segments = [
-            (pomodori['segments'][-1]['start'], datetime(2014, 1, 1, 14, 10)),
-            (pomodori['segments'][-1]['end'], datetime(2014, 1, 1, 14, 35)),
+            (pomodori['segments'][-1]['start'], datetime(2014, 1, 1, 14, 19)),
+            (pomodori['segments'][-1]['end'], datetime(2014, 1, 1, 14, 44)),
             (len([e for e in pomodori['segments'] if e['type'] == 'pomodoro']), 5),
             (len([e for e in pomodori['segments'] if e['type'] == 'short-break']), 3),
             (len([e for e in pomodori['segments'] if e['type'] == 'long-break']), 1),
@@ -261,13 +261,13 @@ class PomodoroTest(unittest.TestCase):
         self.assertDictEqual(
             pomodori,
             {
-                'end': datetime(2014, 1, 1, 14, 35),
+                'end': datetime(2014, 1, 1, 14, 2),
                 'start': datetime(2014, 1, 1, 12, 0),
                 'seconds-per-pomodoro': 1500,
-                'total-breaks': 4,
-                'total-pomodori': 5,
-                'total-rest-time': 1800,
-                'total-work-time': 7500,
+                'total-breaks': 3,
+                'total-pomodori': 4,
+                'total-rest-time': 1080,
+                'total-work-time': 6240,
             },
         )
 
