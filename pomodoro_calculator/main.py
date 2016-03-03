@@ -4,7 +4,7 @@
 
 Usage:
   get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>] [--long-break=<minutes>]
-               [--group=<pomodori>] [--interval] [--json] <end-time>
+               [--group=<pomodori>] [--interval] [--json] [--nocolour] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
@@ -17,6 +17,7 @@ Options:
   -p, --pomodoro=<minutes>    the amount of minutes for every pomodoro session [default: 25].
   -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
   -j, --json                  output the pomodori schedule in JSON format.
+  -n, --nocolour              do not colourise the output.
 """
 from __future__ import print_function
 
@@ -39,16 +40,17 @@ class DateTimeEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def report_output(schedule):
+def report_output(schedule, no_colour=False):
     """
     Takes a Pomodori schedule and returns a pretty, report style
     string that can be printed to the terminal or piped elsewhere.
     """
     lines = []
     colours = {
-        'pomodoro': Style.BRIGHT + Fore.RED,
-        'short-break': Fore.BLUE,
-        'long-break': Fore.CYAN,
+        'pomodoro': '' if no_colour else Style.BRIGHT + Fore.RED,
+        'short-break': '' if no_colour else Fore.BLUE,
+        'long-break': '' if no_colour else Fore.CYAN,
+        'total': '' if no_colour else Style.BRIGHT + Fore.WHITE,
     }
 
     init(autoreset=True)
@@ -75,14 +77,14 @@ def report_output(schedule):
         lines.append(colours[segment['type']] + line)
 
     total = '{:>26} {:>2}'.format('Total Pomodori:', schedule['total-pomodori'])
-    lines.append(Style.BRIGHT + Fore.WHITE + total)
+    lines.append(colours['total'] + total)
 
     hours = round(
         schedule['total-pomodori'] * schedule['seconds-per-pomodoro'] / 60 / 60,
         1,
     )
     total = '{:>26} {:>2}h'.format('Total Work:', hours)
-    lines.append(Style.BRIGHT + Fore.WHITE + total)
+    lines.append(colours['total'] + total)
 
     return '\n'.join(lines)
 
@@ -106,7 +108,10 @@ def main():
             cls=DateTimeEncoder,
         ))
     else:
-        print(report_output(calc.pomodori_schedule()))
+        print(report_output(
+            calc.pomodori_schedule(),
+            arguments['--nocolour'],
+        ))
 
 
 if __name__ == '__main__':
