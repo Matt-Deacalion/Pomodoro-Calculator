@@ -129,7 +129,7 @@ class PomodoroCalculator:
         segments = []
 
         if available_time < self.pomodoro_length_seconds:
-            return []
+            return
 
         for i, segment_name in enumerate(self.pomodori_segments(self.group_length)):
             segment = self._get_item(available_time, segment_name, i + 1)

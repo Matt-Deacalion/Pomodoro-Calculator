@@ -92,7 +92,7 @@ def report_output(schedule, no_colour=False):
 def main():
     arguments = docopt(__doc__, version=__version__)
 
-    calc = PomodoroCalculator(
+    schedule = PomodoroCalculator(
         end=arguments['<end-time>'],
         start=arguments['--from'],
         pomodoro_length=int(arguments['--pomodoro']),
@@ -100,18 +100,16 @@ def main():
         short_break=int(arguments['--break']),
         long_break=int(arguments['--long-break']),
         interval=arguments['--interval'],
-    )
+    ).pomodori_schedule()
+
+    if schedule is None:
+        print('Oops, something went wrong! We need more time for our Pomodoros.')
+        return
 
     if arguments['--json']:
-        print(json.dumps(
-            calc.pomodori_schedule(),
-            cls=DateTimeEncoder,
-        ))
+        print(json.dumps(schedule, cls=DateTimeEncoder))
     else:
-        print(report_output(
-            calc.pomodori_schedule(),
-            arguments['--nocolour'],
-        ))
+        print(report_output(schedule, arguments['--nocolour']))
 
 
 if __name__ == '__main__':

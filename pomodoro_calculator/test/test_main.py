@@ -180,14 +180,13 @@ class PomodoroTest(unittest.TestCase):
         )
 
     @freeze_time('2014-01-01 00:00:00')
-    def test_pomodori_empty(self):
+    def test_pomodori_none(self):
         """
-        Does the `pomodori_schedule` method return an empty list if there's no
-        time?
+        Does the `pomodori_schedule` method return `None` if there's
+        no time?
         """
-        self.assertListEqual(
-            PomodoroCalculator(end='00:05').pomodori_schedule(),
-            [],
+        self.assertIsNone(
+            PomodoroCalculator(end='00:05').pomodori_schedule()
         )
 
     @freeze_time('2014-01-01 00:00:00')
