@@ -54,6 +54,7 @@ Use the `get-pomodori` command from the shell to run the Pomodoro Calculator::
       -l, --long-break=<minutes>  the amount of minutes between every four Pomodori [default: 15].
       -p, --pomodoro=<minutes>    the amount of minutes for every pomodoro session [default: 25].
       -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
+      -j, --json                  output the pomodori schedule in JSON format.
 
 Licence
 -------

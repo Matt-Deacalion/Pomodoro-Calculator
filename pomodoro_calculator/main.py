@@ -3,8 +3,8 @@
 """Calculate the number of Pomodori available within a time period.
 
 Usage:
-  get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>]
-               [--long-break=<minutes>] [--group=<pomodori>] [--interval] <end-time>
+  get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>] [--long-break=<minutes>]
+               [--group=<pomodori>] [--interval] [--json] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
@@ -16,13 +16,27 @@ Options:
   -l, --long-break=<minutes>  the amount of minutes between every four Pomodori [default: 15].
   -p, --pomodoro=<minutes>    the amount of minutes for every pomodoro session [default: 25].
   -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
+  -j, --json                  output the pomodori schedule in JSON format.
 """
 from __future__ import print_function
 
+import json
+from datetime import datetime
+
 from colorama import Fore, Style, init
 from docopt import docopt
-
 from pomodoro_calculator import PomodoroCalculator, __version__
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    """
+    Subclassed so we can encode `datetime` instances.
+    """
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+
+        return json.JSONEncoder.default(self, obj)
 
 
 def report_output(schedule):
@@ -86,7 +100,14 @@ def main():
         interval=arguments['--interval'],
     )
 
-    print(report_output(calc.pomodori_schedule()))
+    if arguments['--json']:
+        print(json.dumps(
+            calc.pomodori_schedule(),
+            cls=DateTimeEncoder,
+        ))
+    else:
+        print(report_output(calc.pomodori_schedule()))
+
 
 if __name__ == '__main__':
     main()
