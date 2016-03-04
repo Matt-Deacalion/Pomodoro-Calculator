@@ -4,7 +4,7 @@ Pomodoro Calculator
 A pretty command line tool to calculate the number of Pomodori available between
 two points in time.
 
-.. image:: https://raw.github.com/Matt-Deacalion/Pomodoro-Calculator/screenshots/screenshot.png
+.. image:: https://raw.github.com/Matt-Deacalion/Pomodoro-Calculator/master/screenshot.png
     :alt: Pomodoro Calculator screenshot
     :align: center
 
