@@ -77,12 +77,18 @@ def report_output(schedule, no_colour=False):
         line = '{id:>2} {name:<12} {start} ⇾ {end}'.format(**line_dict)
         lines.append(colours[segment['type']] + line)
 
-    total = '{:>26} {:>2}'.format('Total Pomodori:', schedule['total-pomodori'])
+    total = '\n{:>18} {}'.format(
+            'Total Pomodori:',
+            schedule['total-pomodori'],
+    )
     lines.append(colours['total'] + total)
 
-    total = '{:>26} {:>2}'.format('Total Work:', humanise_seconds(
-        schedule['total-pomodori'] * schedule['seconds-per-pomodoro'],
-    ))
+    total = '{:>18} {}'.format(
+        'Total Work:',
+        humanise_seconds(
+            schedule['total-pomodori'] * schedule['seconds-per-pomodoro'],
+        ),
+    )
     lines.append(colours['total'] + total)
 
     return '\n'.join(lines)
