@@ -2,9 +2,9 @@ import unittest
 from datetime import datetime, timedelta
 from itertools import islice
 
-from freezegun import freeze_time
+from pomodoro_calculator import PomodoroCalculator, humanise_seconds
 
-from pomodoro_calculator import PomodoroCalculator
+from freezegun import freeze_time
 
 
 class PomodoroTest(unittest.TestCase):
@@ -308,3 +308,14 @@ class PomodoroTest(unittest.TestCase):
                 'long-break',
             ]
         )
+
+    def test_humanise_seconds(self):
+        """
+        Does the `humanise_seconds` utility function work correctly?
+        """
+        self.assertEqual(humanise_seconds(60), '1 minute')
+        self.assertEqual(humanise_seconds(120), '2 minutes')
+        self.assertEqual(humanise_seconds(65), '1 minute')
+        self.assertEqual(humanise_seconds(3600), '1 hour')
+        self.assertEqual(humanise_seconds(7200), '2 hours')
+        self.assertEqual(humanise_seconds(7265), '2 hours, 1 minute')

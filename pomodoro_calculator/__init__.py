@@ -162,3 +162,25 @@ class PomodoroCalculator:
             'total-rest-time': sum(seg['length'] for seg in rest_segments),
             'total-work-time': sum(seg['length'] for seg in work_segments),
         }
+
+
+def humanise_seconds(seconds):
+    """
+    Takes `seconds` as an integer and returns a human readable
+    string, e.g. "2 hours, 5 minutes".
+    """
+    units = []
+    unit_table = [('hour', 3600), ('minute', 60)]
+
+    for unit in unit_table:
+        quotient, seconds = divmod(seconds, unit[1])
+
+        if quotient:
+            units.append(
+                '{} {}'.format(
+                    quotient,
+                    unit[0] + ('s' if quotient > 1 else ''),
+                )
+            )
+
+    return ', '.join(units)

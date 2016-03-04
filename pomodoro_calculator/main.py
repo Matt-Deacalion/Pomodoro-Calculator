@@ -26,7 +26,8 @@ from datetime import datetime
 
 from colorama import Fore, Style, init
 from docopt import docopt
-from pomodoro_calculator import PomodoroCalculator, __version__
+from pomodoro_calculator import (PomodoroCalculator, __version__,
+                                 humanise_seconds)
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -79,11 +80,9 @@ def report_output(schedule, no_colour=False):
     total = '{:>26} {:>2}'.format('Total Pomodori:', schedule['total-pomodori'])
     lines.append(colours['total'] + total)
 
-    hours = round(
-        schedule['total-pomodori'] * schedule['seconds-per-pomodoro'] / 60 / 60,
-        1,
-    )
-    total = '{:>26} {:>2}h'.format('Total Work:', hours)
+    total = '{:>26} {:>2}'.format('Total Work:', humanise_seconds(
+        schedule['total-pomodori'] * schedule['seconds-per-pomodoro'],
+    ))
     lines.append(colours['total'] + total)
 
     return '\n'.join(lines)
