@@ -3,7 +3,7 @@ A pretty command line tool to calculate the number
 of Pomodori available between two points in time.
 """
 __author__ = 'Matt Deacalion Stevens'
-__version__ = '0.3.9'
+__version__ = '1.0.0'
 
 import datetime
 from itertools import cycle
