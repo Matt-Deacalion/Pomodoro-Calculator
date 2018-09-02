@@ -309,6 +309,62 @@ class PomodoroTest(unittest.TestCase):
             ]
         )
 
+    @freeze_time('2018-09-01 0:00:00')
+    def test_amount_functionality(self):
+        """
+        Does specifying desired amount of pomodori work?
+        """
+        pomodori = PomodoroCalculator(end='12', amount=True).pomodori_schedule()
+        del pomodori['segments']
+
+        # Use known functionality to confirm correctness
+        pomodori_reference = PomodoroCalculator(end='06:39:00').pomodori_schedule()
+        del pomodori_reference['segments']
+        self.assertDictEqual(
+            pomodori,
+            {
+                'end': datetime(2018, 9, 1, 6, 38),
+                'start': datetime(2018, 9, 1, 0, 0),
+                'seconds-per-pomodoro': 1500,
+                'total-breaks': 11,
+                'total-pomodori': 12,
+                'total-rest-time': 4500,
+                'total-work-time': 18000,
+            }
+        )
+        self.assertDictEqual(pomodori_reference, pomodori)
+        # Try shorter item
+        pomodori_short = PomodoroCalculator(end='1', amount=True).pomodori_schedule()
+        del pomodori_short['segments']
+        self.assertDictEqual(
+            pomodori_short,
+            {
+                'end': datetime(2018, 9, 1, 0, 26),
+                'start': datetime(2018, 9, 1, 0, 0),
+                'seconds-per-pomodoro': 1500,
+                'total-breaks': 0,
+                'total-pomodori': 1,
+                'total-rest-time': 0,
+                'total-work-time': 1500,
+            }
+        )
+
+        pomodori_final = PomodoroCalculator(end='3', amount=True).pomodori_schedule()
+        del pomodori_final['segments']
+        self.assertDictEqual(
+            pomodori_final,
+            {
+                'end': datetime(2018, 9, 1, 1, 30),
+                'start': datetime(2018, 9, 1, 0, 0),
+                'seconds-per-pomodoro': 1500,
+                'total-breaks': 2,
+                'total-pomodori': 3,
+                'total-rest-time': 600,
+                'total-work-time': 4500,
+            }
+        )
+
+
     def test_humanise_seconds(self):
         """
         Does the `humanise_seconds` utility function work correctly?

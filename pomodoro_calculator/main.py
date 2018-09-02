@@ -4,7 +4,7 @@
 
 Usage:
   get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>] [--long-break=<minutes>]
-               [--group=<pomodori>] [--interval] [--json] [--nocolour] <end-time>
+               [--group=<pomodori>] [--interval] [--json] [--nocolour] [--amount] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
@@ -18,6 +18,7 @@ Options:
   -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
   -j, --json                  output the pomodori schedule in JSON format.
   -n, --nocolour              do not colourise the output.
+  -a, --amount                specify that the end time is the number of pomodoros you desire to do, not the time of a day.
 """
 from __future__ import print_function
 
@@ -105,6 +106,7 @@ def main():
         short_break=int(arguments['--break']),
         long_break=int(arguments['--long-break']),
         interval=arguments['--interval'],
+        amount=arguments['--amount']
     ).pomodori_schedule()
 
     if schedule is None:
