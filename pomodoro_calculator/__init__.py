@@ -3,7 +3,7 @@ A pretty command line tool to calculate the number
 of Pomodori available between two points in time.
 """
 __author__ = 'Matt Deacalion Stevens'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 import datetime
 from itertools import cycle
@@ -141,15 +141,11 @@ class PomodoroCalculator:
         if available_time < self.pomodoro_length_seconds + self.grace:
             return
 
-        pomodoro_counter = 0
         for i, segment_name in enumerate(self.pomodori_segments(self.group_length)):
             segment = self._get_item(available_time, segment_name, i + 1)
 
-            if self.amount_mode:
-                if segment['type'] == "pomodoro":
-                    pomodoro_counter += 1
-                if pomodoro_counter > self.amount:
-                    break
+            if self.amount_mode and segment['pomodori-index'] > self.amount:
+                break
             elif segment['length'] > available_time:
                 break
 

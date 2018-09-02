@@ -4,7 +4,7 @@
 
 Usage:
   get-pomodori [--pomodoro=<time>] [--from=<time>] [--break=<minutes>] [--long-break=<minutes>]
-               [--group=<pomodori>] [--interval] [--json] [--nocolour] [--amount] <end-time>
+               [--group=<pomodori>] [--interval] [--json] [--nocolour] [--amount] [--extensive-report] <end-time>
   get-pomodori (-h | --help | --version)
 
 Options:
@@ -19,6 +19,7 @@ Options:
   -j, --json                  output the pomodori schedule in JSON format.
   -n, --nocolour              do not colourise the output.
   -a, --amount                specify that the end time is the number of pomodoros you desire to do, not the time of a day.
+  -x, --extensive-report      also write total break time and total session time.
 """
 from __future__ import print_function
 
@@ -35,6 +36,7 @@ class DateTimeEncoder(json.JSONEncoder):
     """
     Subclassed so we can encode `datetime` instances.
     """
+
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
@@ -42,7 +44,7 @@ class DateTimeEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def report_output(schedule, no_colour=False):
+def report_output(schedule, no_colour=False, more_info=False):
     """
     Takes a Pomodori schedule and returns a pretty, report style
     string that can be printed to the terminal or piped elsewhere.
@@ -91,7 +93,14 @@ def report_output(schedule, no_colour=False):
         ),
     )
     lines.append(colours['total'] + total)
-
+    if more_info:
+        lines.append(
+            colours['total'] + '{:>18} {}'.format('Total Rest:', humanise_seconds(schedule['total-rest-time'], )))
+        lines.append(colours['total'] + '{:>18} {}'.format('Long Breaks:', sum(
+            1 for itm in schedule['segments'] if itm["type"] == "long-break")))
+        lines.append(
+            colours['total'] + '{:>18} {}'.format('Total spent time:', humanise_seconds(
+                schedule['total-work-time'] + schedule['total-rest-time'])))
     return '\n'.join(lines)
 
 
@@ -116,7 +125,7 @@ def main():
     if arguments['--json']:
         print(json.dumps(schedule, cls=DateTimeEncoder))
     else:
-        print(report_output(schedule, arguments['--nocolour']))
+        print(report_output(schedule, arguments['--nocolour'], arguments['--extensive-report']))
 
 
 if __name__ == '__main__':

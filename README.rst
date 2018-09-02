@@ -37,6 +37,8 @@ Use the `get-pomodori` command from the shell to run the Pomodoro Calculator::
       -g, --group=<pomodori>      the amount of pomodori before a long break [default: 4].
       -j, --json                  output the pomodori schedule in JSON format.
       -n, --nocolour              do not colourise the output.
+      -a, --amount                specify that the end time is the number of pomodoros you desire to do, not the time of a day.
+      -x, --extensive-report      also write total break time and total session time.
 
 Licence
 -------
